@@ -6,8 +6,14 @@
 import { FunctionComponent, useMemo } from "react"
 import styled from "styled-components"
 import { Contact } from "devices/common/models"
-import { IconButton, Typography } from "app-theme/ui"
-import { IconSize, IconType, TypographyWeight } from "app-theme/models"
+import { Button, IconButton, Typography } from "app-theme/ui"
+import {
+  ButtonSize,
+  ButtonType,
+  IconSize,
+  IconType,
+  TypographyWeight,
+} from "app-theme/models"
 import { AnimatePresence, motion } from "motion/react"
 import { DetailsPhoneNumber } from "./details-phone-number"
 import { DetailsSingleRow } from "./details-single-row"
@@ -61,18 +67,23 @@ const messages = defineMessages({
   notesLabel: {
     id: "apiDevice.contacts.details.labels.notes",
   },
+  editButton: {
+    id: "apiDevice.contacts.details.editButton",
+  },
 })
 
 interface Props {
   contact?: Contact
   onDelete?: VoidFunction
   onClose?: VoidFunction
+  onEdit?: VoidFunction
 }
 
 export const Details: FunctionComponent<Props> = ({
   contact,
   onDelete,
   onClose,
+  onEdit,
 }) => {
   const moreDetails = useMemo(() => {
     return [
@@ -186,6 +197,14 @@ export const Details: FunctionComponent<Props> = ({
               </Typography.H3>
             </HeaderName>
             <HeaderActions>
+              {onEdit && (
+                <Button
+                  type={ButtonType.Secondary}
+                  size={ButtonSize.Small}
+                  message={messages.editButton.id}
+                  onClick={onEdit}
+                />
+              )}
               <IconButton
                 icon={IconType.Trash}
                 size={IconSize.Big}

@@ -14,6 +14,8 @@ import { ApiDevice, ApiDevicePaths } from "devices/api-device/models"
 import { ScreenLoader } from "app-theme/ui"
 import {
   contactsMapper,
+  patchEntityData,
+  postEntityData,
   sendEntities,
   useApiDeviceDeleteEntitiesMutation,
   useApiEntitiesDataQuery,
@@ -25,7 +27,7 @@ import {
 } from "devices/common/feature"
 import styled from "styled-components"
 import { DashboardHeaderTitle } from "app-routing/feature"
-import { Contacts, ImportState } from "devices/common/ui"
+import { ContactFormValues, Contacts, ImportState } from "devices/common/ui"
 import { Contact } from "devices/common/models"
 import { defineMessages, formatMessage } from "app-localize/utils"
 import { useQueryClient } from "@tanstack/react-query"
@@ -275,6 +277,81 @@ export const McContactsScreen: FunctionComponent = () => {
     })
   }, [contacts])
 
+  const handleSaveContact = useCallback(
+    async (values: ContactFormValues) => {
+      if (!device || !feature?.entityType) {
+        return
+      }
+      const entityType = feature.entityType
+
+      // Preserve every existing field; only override what the form edits.
+      // Without this, an edit (e.g. renaming) would wipe address, nickname,
+      // department, etc. Device-computed/identity fields are stripped so they
+      // get recalculated from the new data.
+      const original = contacts?.find((c) => c.contactId === values.contactId)
+      const preserved: Record<string, unknown> = { ...(original ?? {}) }
+      for (const key of [
+        "contactId",
+        "searchName",
+        "sortField",
+        "displayName1",
+        "displayName2",
+        "displayName3",
+        "displayName4",
+      ]) {
+        delete preserved[key]
+      }
+
+      const addressFilled = [
+        values.address.streetAddress,
+        values.address.secondStreetAddress,
+        values.address.poBox,
+        values.address.city,
+        values.address.state,
+        values.address.zipCode,
+        values.address.country,
+      ].some((v) => v.trim())
+
+      const data = {
+        ...preserved,
+        firstName: values.firstName || undefined,
+        lastName: values.lastName || undefined,
+        company: values.company || undefined,
+        notes: values.notes || undefined,
+        // IMPORTANT: send phones/emails WITHOUT their existing id. The device's
+        // PATCH drops entries that carry an id it already knows, but re-creates
+        // id-less ones — so we always send them id-less (device assigns fresh
+        // ids). This is what preserves them across an edit.
+        // Types are sent UPPERCASE (MOBILE/HOME/WORK/OTHER): the device's PATCH
+        // only recognises its canonical uppercase tokens and defaults anything
+        // else (incl. lowercase) to OTHER.
+        phoneNumbers: values.phoneNumbers.map((p) => ({
+          phoneNumber: p.phoneNumber,
+          phoneType: p.phoneType.toUpperCase(),
+        })),
+        emailAddresses: values.emailAddresses.map((e) => ({
+          emailAddress: e.emailAddress,
+          emailType: e.emailType.toUpperCase(),
+        })),
+        address: addressFilled
+          ? { ...values.address, type: values.address.type.toUpperCase() }
+          : undefined,
+        entityType,
+      }
+      if (values.contactId) {
+        await patchEntityData(device, {
+          entityType,
+          entityId: values.contactId,
+          data,
+        })
+      } else {
+        await postEntityData(device, { entityType, data })
+      }
+      await refetch()
+    },
+    [device, feature, refetch, contacts]
+  )
+
   const handleManageDuplicates = useCallback(() => {
     navigate(`${ApiDevicePaths.Index}/mc-contacts/mc-contacts-duplicates`)
   }, [navigate])
@@ -327,6 +404,7 @@ export const McContactsScreen: FunctionComponent = () => {
             onManageDuplicates={handleManageDuplicates}
             onHelpClick={handleImportHelpClick}
             onExport={handleExport}
+            onSave={handleSaveContact}
           />
         </Content>
       </ScreenLoader>

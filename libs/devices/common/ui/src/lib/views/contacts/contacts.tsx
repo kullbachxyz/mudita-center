@@ -22,6 +22,7 @@ import {
 import { Details } from "./details"
 import { Contact, ContactsNormalized } from "devices/common/models"
 import { Panel } from "./panel"
+import { ContactFormModal, ContactFormValues } from "./contact-form-modal"
 import { Search } from "./search"
 import { Form, FormValues } from "./form"
 import { Empty } from "./empty"
@@ -83,6 +84,7 @@ interface Props {
   onManageDuplicates: VoidFunction
   onHelpClick?: VoidFunction
   onExport?: VoidFunction
+  onSave?: (values: ContactFormValues) => Promise<void>
 }
 
 export const Contacts: FunctionComponent<Props> = (props) => {
@@ -102,12 +104,29 @@ const ContactsInner: FunctionComponent<Props> = ({
   onManageDuplicates,
   onHelpClick,
   onExport,
+  onSave,
 }) => {
   const { setValue, watch, getValues } = useFormContext<FormValues>()
   const tableRef = useRef<Table<Contact, "contactId">>(null)
   const genericDeleteRef = useRef<GenericDeleteFlow>(null)
   const importFlowRef = useRef<ContactsImportFlow>(null)
   const [deleteType, setDeleteType] = useState<DeleteType>()
+  const [formOpen, setFormOpen] = useState(false)
+  const [editingContact, setEditingContact] = useState<Contact | undefined>()
+
+  const handleAddContact = useCallback(() => {
+    setEditingContact(undefined)
+    setFormOpen(true)
+  }, [])
+
+  const handleEditContact = useCallback((contact: Contact) => {
+    setEditingContact(contact)
+    setFormOpen(true)
+  }, [])
+
+  const handleFormClose = useCallback(() => {
+    setFormOpen(false)
+  }, [])
 
   const activeContactId = watch("activeContactId")
   const activeContact = contacts?.find(
@@ -287,6 +306,7 @@ const ContactsInner: FunctionComponent<Props> = ({
         onDeleteClick={handleCheckedContactsDelete}
         onImportClick={handleImportStart}
         onExportClick={onExport}
+        onAddClick={onSave ? handleAddContact : undefined}
       >
         {search}
       </Panel>
@@ -296,6 +316,8 @@ const ContactsInner: FunctionComponent<Props> = ({
     handleCheckedContactsDelete,
     handleImportStart,
     onExport,
+    onSave,
+    handleAddContact,
     search,
   ])
 
@@ -305,9 +327,20 @@ const ContactsInner: FunctionComponent<Props> = ({
         contact={activeContact}
         onClose={handleDetailsClose}
         onDelete={handleActiveContactDelete}
+        onEdit={
+          onSave && activeContact
+            ? () => handleEditContact(activeContact)
+            : undefined
+        }
       />
     )
-  }, [activeContact, handleDetailsClose, handleActiveContactDelete])
+  }, [
+    activeContact,
+    handleDetailsClose,
+    handleActiveContactDelete,
+    handleEditContact,
+    onSave,
+  ])
 
   const deleteFlow = useMemo(() => {
     return (
@@ -356,6 +389,14 @@ const ContactsInner: FunctionComponent<Props> = ({
         </>
       )}
       {importFlow}
+      {onSave && (
+        <ContactFormModal
+          opened={formOpen}
+          contact={editingContact}
+          onClose={handleFormClose}
+          onSave={onSave}
+        />
+      )}
     </>
   )
 }

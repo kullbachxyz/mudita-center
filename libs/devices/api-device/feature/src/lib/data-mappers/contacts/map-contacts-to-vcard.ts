@@ -3,7 +3,7 @@
  * For licensing, see https://github.com/mudita/mudita-center/blob/master/LICENSE.md
  */
 
-import { Contact, PhoneNumberType } from "devices/common/models"
+import { Contact } from "devices/common/models"
 
 // Escape a value for a vCard 3.0 text field (RFC 2426 §5).
 const escapeValue = (value: string | undefined): string =>
@@ -12,15 +12,6 @@ const escapeValue = (value: string | undefined): string =>
     .replace(/\n/g, "\\n")
     .replace(/,/g, "\\,")
     .replace(/;/g, "\\;")
-
-const phoneTypeMap: Record<PhoneNumberType, string> = {
-  [PhoneNumberType.Mobile]: "CELL",
-  [PhoneNumberType.Home]: "HOME",
-  [PhoneNumberType.Work]: "WORK",
-  [PhoneNumberType.Other]: "OTHER",
-}
-
-const upper = (value: string): string => value.toUpperCase()
 
 const composeFullName = (contact: Contact): string => {
   const parts = [
@@ -72,24 +63,27 @@ const contactToVcard = (contact: Contact): string => {
     lines.push("TITLE:" + escapeValue(contact.workTitle))
   }
 
+  // Mudita's vCard import matches TYPE against its own lowercase tokens
+  // (mobile|home|work|other); RFC types like CELL would import as "other".
   for (const phone of contact.phoneNumbers ?? []) {
-    const type = phoneTypeMap[phone.phoneType] ?? "VOICE"
-    lines.push(`TEL;TYPE=${type}:${escapeValue(phone.phoneNumber)}`)
+    lines.push(`TEL;TYPE=${phone.phoneType}:${escapeValue(phone.phoneNumber)}`)
   }
   for (const email of contact.emailAddresses ?? []) {
     lines.push(
-      `EMAIL;TYPE=${upper(email.emailType)}:${escapeValue(email.emailAddress)}`
+      `EMAIL;TYPE=${email.emailType}:${escapeValue(email.emailAddress)}`
     )
   }
 
   const address = contact.address
   if (address) {
     lines.push(
-      `ADR;TYPE=${upper(address.type)}:` +
+      // Mudita's ADR order: poBox; street; second-street; city; state; zip;
+      // country (street before extended — matches Mudita's own parser).
+      `ADR;TYPE=${address.type}:` +
         [
           escapeValue(address.poBox),
-          escapeValue(address.secondStreetAddress),
           escapeValue(address.streetAddress),
+          escapeValue(address.secondStreetAddress),
           escapeValue(address.city),
           escapeValue(address.state),
           escapeValue(address.zipCode),

@@ -19,6 +19,12 @@ const messages = defineMessages({
   exportButton: {
     id: "apiDevice.contacts.exportButton",
   },
+  addButton: {
+    id: "apiDevice.contacts.addButton",
+  },
+  selectAllButton: {
+    id: "apiDevice.contacts.selectAllButton",
+  },
   selectedContacts: {
     id: "apiDevice.contacts.panel.selectedContacts",
   },
@@ -32,6 +38,7 @@ interface Props extends PropsWithChildren {
   onDeleteClick: VoidFunction
   onImportClick: VoidFunction
   onExportClick?: VoidFunction
+  onAddClick?: VoidFunction
 }
 
 export const Panel: FunctionComponent<Props> = ({
@@ -40,6 +47,7 @@ export const Panel: FunctionComponent<Props> = ({
   onDeleteClick,
   onImportClick,
   onExportClick,
+  onAddClick,
 }) => {
   const form = useFormContext<FormValues>()
 
@@ -62,6 +70,13 @@ export const Panel: FunctionComponent<Props> = ({
       )
     }
   }, [selectedCount, totalCount, form, contactsIds])
+
+  const onSelectAll = useCallback(() => {
+    form.setValue(
+      "selectedContacts",
+      Object.fromEntries(contactsIds.map((id) => [id, true]))
+    )
+  }, [form, contactsIds])
 
   return (
     <Wrapper>
@@ -92,6 +107,8 @@ export const Panel: FunctionComponent<Props> = ({
             <PanelDefaultMode
               onImportClick={onImportClick}
               onExportClick={onExportClick}
+              onAddClick={onAddClick}
+              onSelectAllClick={totalCount > 0 ? onSelectAll : undefined}
             >
               {children}
             </PanelDefaultMode>
@@ -103,13 +120,25 @@ export const Panel: FunctionComponent<Props> = ({
 }
 
 const PanelDefaultMode: FunctionComponent<
-  PropsWithChildren & Pick<Props, "onImportClick" | "onExportClick">
-> = memo(({ children, onImportClick, onExportClick }) => {
-  return (
-    <>
-      <HeadingSearch>{children}</HeadingSearch>
-      <HeadingActions>
-        {onExportClick && (
+  PropsWithChildren &
+    Pick<Props, "onImportClick" | "onExportClick" | "onAddClick"> & {
+      onSelectAllClick?: VoidFunction
+    }
+> = memo(
+  ({ children, onImportClick, onExportClick, onAddClick, onSelectAllClick }) => {
+    return (
+      <>
+        <HeadingSearch>{children}</HeadingSearch>
+        <HeadingActions>
+          {onSelectAllClick && (
+            <Button
+              type={ButtonType.Text}
+              size={ButtonSize.Medium}
+              message={messages.selectAllButton.id}
+              onClick={onSelectAllClick}
+            />
+          )}
+          {onExportClick && (
           <Button
             type={ButtonType.Secondary}
             size={ButtonSize.Medium}
@@ -118,10 +147,18 @@ const PanelDefaultMode: FunctionComponent<
           />
         )}
         <Button
+          type={ButtonType.Secondary}
           size={ButtonSize.Medium}
           message={messages.importButton.id}
           onClick={onImportClick}
         />
+        {onAddClick && (
+          <Button
+            size={ButtonSize.Medium}
+            message={messages.addButton.id}
+            onClick={onAddClick}
+          />
+        )}
       </HeadingActions>
     </>
   )

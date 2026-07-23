@@ -17,6 +17,16 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.app.color.black};
   }
 
+  /* MMD monochrome: native <button>/<select> otherwise show the OS accent
+     colour (e.g. orange) as their focus ring. Replace it with a neutral,
+     theme-consistent outline. */
+  button:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 0.2rem solid ${({ theme }) => theme.app.color.grey2};
+    outline-offset: 0.2rem;
+  }
+
   html {
     background-color: ${({ theme }) => theme.app.color.grey6};
     font-family: GT Pressura, Roboto Condensed, sans-serif;
