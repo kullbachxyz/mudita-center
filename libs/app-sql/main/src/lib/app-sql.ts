@@ -3,7 +3,7 @@
  * For licensing, see https://github.com/mudita/mudita-center/blob/master/LICENSE.md
  */
 
-import initSqlJs, { Database, SqlJsStatic } from "sql.js/dist/sql-wasm"
+import initSqlJs, { Database, SqlJsStatic } from "sql.js/dist/sql-wasm.js"
 import { AppSqlInitializationOptions } from "app-sql/models"
 import { AppFileSystemService } from "app-utils/main"
 import { AppResult, AppResultFactory } from "app-utils/models"

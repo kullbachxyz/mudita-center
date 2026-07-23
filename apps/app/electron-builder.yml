@@ -50,9 +50,5 @@ linux:
     - AppImage
 appImage:
   license: ./resources/license_en.txt
-publish:
-  - provider: github
-    owner: Mudita
-    repo: ${env.VITE_RELEASES_REPOSITORY_NAME}
-    private: true
-    channel: latest
+# publish block removed for local fork build (referenced Mudita's private release repo
+# via VITE_RELEASES_REPOSITORY_NAME). Re-add if you ever wire up your own releases.
