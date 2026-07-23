@@ -1,0 +1,31 @@
+# Maintainer: kullbachxyz
+# Packages the locally-built MMD monochrome Mudita Center AppImage as a
+# pacman-tracked package. Build the AppImage first (npm run build:linux),
+# then from this directory:  makepkg -si
+pkgname=mudita-center-mmd
+pkgver=4.0.0
+pkgrel=1
+pkgdesc="Mudita Center — MMD monochrome dark build (local fork of mudita/mudita-center)"
+arch=('x86_64')
+url="https://github.com/kullbachxyz/mudita-center"
+license=('GPL3')
+depends=('hicolor-icon-theme')
+optdepends=('fuse2: launch the AppImage without extract-and-run')
+provides=('mudita-center')
+conflicts=('mudita-center')
+options=('!strip')
+
+package() {
+  local repo="$startdir/.."
+  local appimage="$repo/apps/app/release/Mudita-Center.AppImage"
+
+  if [ ! -f "$appimage" ]; then
+    echo "AppImage missing — run 'npm run build:linux' in the repo root first." >&2
+    return 1
+  fi
+
+  install -Dm755 "$appimage"                    "$pkgdir/opt/mudita-center/Mudita-Center.AppImage"
+  install -Dm755 "$startdir/mudita-center"       "$pkgdir/usr/bin/mudita-center"
+  install -Dm644 "$startdir/mudita-center.desktop" "$pkgdir/usr/share/applications/mudita-center.desktop"
+  install -Dm644 "$repo/apps/app/resources/icons/icon.png" "$pkgdir/usr/share/icons/hicolor/512x512/apps/mudita-center.png"
+}

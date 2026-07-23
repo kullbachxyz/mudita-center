@@ -1,0 +1,16 @@
+#!/bin/sh
+# Launcher for the MMD monochrome Mudita Center build.
+APPIMAGE="/opt/mudita-center/Mudita-Center.AppImage"
+
+if [ ! -x "$APPIMAGE" ]; then
+  echo "mudita-center: $APPIMAGE not found — reinstall the package." >&2
+  exit 1
+fi
+
+# Use the FUSE mount path if available, otherwise fall back to extraction
+# (works on systems without fuse2 installed).
+if command -v fusermount >/dev/null 2>&1 || command -v fusermount3 >/dev/null 2>&1; then
+  exec "$APPIMAGE" "$@"
+else
+  exec "$APPIMAGE" --appimage-extract-and-run "$@"
+fi
