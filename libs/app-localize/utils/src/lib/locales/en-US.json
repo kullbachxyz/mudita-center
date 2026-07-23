@@ -103,6 +103,8 @@
   "apiDevice.contacts.import.providerSelectionModal.description": "Select the location of your contacts.",
   "apiDevice.contacts.import.providerSelectionModal.title": "Import contacts",
   "apiDevice.contacts.importButton": "Import contacts",
+  "apiDevice.contacts.exportButton": "Export",
+  "apiDevice.contacts.export.fileDialog.title": "Choose export folder",
   "apiDevice.contacts.loadingState.title": "Loading contacts, please wait...",
   "apiDevice.contacts.panel.searchEmpty": "We couldn't find anything...",
   "apiDevice.contacts.panel.searchPlaceholder": "Search all contacts",

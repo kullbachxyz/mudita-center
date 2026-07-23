@@ -53,6 +53,9 @@ const messages = defineMessages({
   fileDialogFilterName: {
     id: "apiDevice.contacts.import.fileDialog.filterName",
   },
+  exportDialogTitle: {
+    id: "apiDevice.contacts.export.fileDialog.title",
+  },
 })
 
 export const McContactsScreen: FunctionComponent = () => {
@@ -254,6 +257,24 @@ export const McContactsScreen: FunctionComponent = () => {
     importAbortController.current.abort()
   }, [])
 
+  const handleExport = useCallback(async () => {
+    if (!contacts || contacts.length === 0) {
+      return
+    }
+    const [dirPath] = await AppActions.openFileDialog({
+      title: formatMessage(messages.exportDialogTitle),
+      properties: ["openDirectory"],
+    })
+    if (!dirPath) {
+      return
+    }
+    await AppFileSystem.writeFile({
+      absolute: true,
+      fileAbsolutePath: path.join(dirPath, "mudita-contacts.vcf"),
+      data: contactsMapper.toVcard(contacts),
+    })
+  }, [contacts])
+
   const handleManageDuplicates = useCallback(() => {
     navigate(`${ApiDevicePaths.Index}/mc-contacts/mc-contacts-duplicates`)
   }, [navigate])
@@ -305,6 +326,7 @@ export const McContactsScreen: FunctionComponent = () => {
             onImportCancel={handleImportCancel}
             onManageDuplicates={handleManageDuplicates}
             onHelpClick={handleImportHelpClick}
+            onExport={handleExport}
           />
         </Content>
       </ScreenLoader>

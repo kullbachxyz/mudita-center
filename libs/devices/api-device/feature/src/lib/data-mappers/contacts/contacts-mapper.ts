@@ -7,10 +7,12 @@ import { mapCsvContacts } from "./map-csv-contacts"
 import { mapVcardContacts } from "./map-vcard-contacts"
 import { mapGoogleApiContacts } from "./map-google-api-contacts"
 import { mapOutlookApiContacts } from "./map-outlook-api-contacts"
+import { mapContactsToVcard } from "./map-contacts-to-vcard"
 
 export const contactsMapper = {
   fromCsv: mapCsvContacts,
   fromVcard: mapVcardContacts,
   fromGoogleApi: mapGoogleApiContacts,
   fromOutlookApi: mapOutlookApiContacts,
+  toVcard: mapContactsToVcard,
 }

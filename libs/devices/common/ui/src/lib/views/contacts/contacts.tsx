@@ -82,6 +82,7 @@ interface Props {
   onImportCancel: VoidFunction
   onManageDuplicates: VoidFunction
   onHelpClick?: VoidFunction
+  onExport?: VoidFunction
 }
 
 export const Contacts: FunctionComponent<Props> = (props) => {
@@ -100,6 +101,7 @@ const ContactsInner: FunctionComponent<Props> = ({
   onImportCancel,
   onManageDuplicates,
   onHelpClick,
+  onExport,
 }) => {
   const { setValue, watch, getValues } = useFormContext<FormValues>()
   const tableRef = useRef<Table<Contact, "contactId">>(null)
@@ -284,11 +286,18 @@ const ContactsInner: FunctionComponent<Props> = ({
         contactsIds={contactsIds}
         onDeleteClick={handleCheckedContactsDelete}
         onImportClick={handleImportStart}
+        onExportClick={onExport}
       >
         {search}
       </Panel>
     )
-  }, [contactsIds, handleCheckedContactsDelete, handleImportStart, search])
+  }, [
+    contactsIds,
+    handleCheckedContactsDelete,
+    handleImportStart,
+    onExport,
+    search,
+  ])
 
   const details = useMemo(() => {
     return (

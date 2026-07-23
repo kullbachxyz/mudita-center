@@ -16,6 +16,9 @@ const messages = defineMessages({
   importButton: {
     id: "apiDevice.contacts.importButton",
   },
+  exportButton: {
+    id: "apiDevice.contacts.exportButton",
+  },
   selectedContacts: {
     id: "apiDevice.contacts.panel.selectedContacts",
   },
@@ -28,6 +31,7 @@ interface Props extends PropsWithChildren {
   contactsIds: string[]
   onDeleteClick: VoidFunction
   onImportClick: VoidFunction
+  onExportClick?: VoidFunction
 }
 
 export const Panel: FunctionComponent<Props> = ({
@@ -35,6 +39,7 @@ export const Panel: FunctionComponent<Props> = ({
   children,
   onDeleteClick,
   onImportClick,
+  onExportClick,
 }) => {
   const form = useFormContext<FormValues>()
 
@@ -84,7 +89,10 @@ export const Panel: FunctionComponent<Props> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
-            <PanelDefaultMode onImportClick={onImportClick}>
+            <PanelDefaultMode
+              onImportClick={onImportClick}
+              onExportClick={onExportClick}
+            >
               {children}
             </PanelDefaultMode>
           </DefaultMode>
@@ -95,12 +103,20 @@ export const Panel: FunctionComponent<Props> = ({
 }
 
 const PanelDefaultMode: FunctionComponent<
-  PropsWithChildren & Pick<Props, "onImportClick">
-> = memo(({ children, onImportClick }) => {
+  PropsWithChildren & Pick<Props, "onImportClick" | "onExportClick">
+> = memo(({ children, onImportClick, onExportClick }) => {
   return (
     <>
       <HeadingSearch>{children}</HeadingSearch>
       <HeadingActions>
+        {onExportClick && (
+          <Button
+            type={ButtonType.Secondary}
+            size={ButtonSize.Medium}
+            message={messages.exportButton.id}
+            onClick={onExportClick}
+          />
+        )}
         <Button
           size={ButtonSize.Medium}
           message={messages.importButton.id}
