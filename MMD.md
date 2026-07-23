@@ -58,6 +58,34 @@ See [`packaging/`](packaging/README.md) — `makepkg -si` (pacman-tracked) or
 `sudo bash packaging/install.sh`. Gives a `/usr/bin/mudita-center` launcher and
 an app-menu entry.
 
+## Updating (rebuild + reinstall after a change)
+
+The full loop after editing the source (assumes `npm ci` + fonts copy already
+done once):
+
+Rebuild the AppImage:
+
+```sh
+cd ~/.local/src/mudita-center
+export PATH="$PWD/.toolchain/node-v24.14.0-linux-x64/bin:$PATH"
+npm run build:linux
+```
+
+Then bump `pkgrel` in `packaging/PKGBUILD` (e.g. `2` → `3`) so pacman treats it
+as an upgrade, and rebuild + install the package:
+
+```sh
+cd packaging
+makepkg -sfi
+```
+
+`makepkg -sfi` = sync deps / force-overwrite existing pkg / install (prompts for
+sudo). To just try a change without installing, run `npm start` (dev,
+hot-reload) instead.
+
+Note: paste these one line at a time — interactive zsh does not treat `#` as a
+comment, so avoid trailing `# ...` comments on command lines.
+
 ## Notes
 
 - A **locked** device answers with HTTP 423 and data screens hang at
