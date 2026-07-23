@@ -4,7 +4,7 @@
 # then from this directory:  makepkg -si
 pkgname=mudita-center-mmd
 pkgver=4.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Mudita Center — MMD monochrome dark build (local fork of mudita/mudita-center)"
 arch=('x86_64')
 url="https://github.com/kullbachxyz/mudita-center"
