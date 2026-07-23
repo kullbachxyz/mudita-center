@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Version=1.0
-Name=Mudita Center (MMD)
+Name=Mudita Center
 GenericName=Mudita device manager
 Comment=Manage your Mudita device — monochrome dark build
 Exec=mudita-center %U

@@ -172,12 +172,15 @@ const Diagram = styled.div`
     width: 111%;
     height: 147%;
     transform: translate(-5%, -13%);
-    /* MMD monochrome: diagram is black line-art on light circles built for a
-       white page. invert() flips it to white line-art for the dark theme;
-       grayscale() neutralises the blue-grey strokes that invert would otherwise
-       turn brown; brightness() lifts the mid-grey artwork (logo, laptop) so it
-       reads lighter, while the near-black circles stay subtle. */
-    filter: invert(1) grayscale(1) brightness(1.5);
+    /* MMD monochrome (dark only): diagram is black line-art on light circles
+       built for a white page. invert() flips it to white line-art;
+       grayscale() neutralises the blue-grey strokes that invert would turn
+       brown; brightness() lifts the mid-grey artwork. In light mode the asset
+       is used as-is. */
+    ${({ theme }) =>
+      theme.mode === "dark"
+        ? "filter: invert(1) grayscale(1) brightness(1.5);"
+        : ""}
   }
 `
 

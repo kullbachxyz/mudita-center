@@ -5,3 +5,4 @@
 
 export * from "./lib/app-settings"
 export * from "./lib/use-settings"
+export * from "./lib/settings-query-keys"

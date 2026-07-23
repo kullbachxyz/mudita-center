@@ -4,6 +4,7 @@
  */
 
 export * from "./lib/about-page/about"
+export * from "./lib/appearance-page/appearance"
 export * from "./lib/backup-page/backup"
 export * from "./lib/license/license"
 export * from "./lib/privacy-policy/privacy-policy"

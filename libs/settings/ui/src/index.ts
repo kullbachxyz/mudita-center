@@ -4,6 +4,7 @@
  */
 
 export * from "./lib/about/about.component"
+export * from "./lib/appearance/appearance.component"
 export * from "./lib/backup/backup.component"
 export * from "./lib/legal/license.component"
 export * from "./lib/legal/privacy-policy.component"

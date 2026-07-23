@@ -57,9 +57,9 @@ const IconWrapper = styled.div`
   justify-content: center;
   align-items: center;
   /* icon glyphs ship with a dark fill; invert so they read light on the
-     dark surface tile. */
+     dark surface tile (dark mode only). */
   > * {
-    filter: invert(1);
+    ${({ theme }) => (theme.mode === "dark" ? "filter: invert(1);" : "")}
   }
 `
 

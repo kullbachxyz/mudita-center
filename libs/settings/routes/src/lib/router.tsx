@@ -5,7 +5,11 @@
 
 import { Navigate, Route } from "react-router"
 import { useMenuItemsRegister } from "app-routing/feature"
-import { SettingsAboutPage, SettingsBackupPage } from "settings/feature"
+import {
+  SettingsAboutPage,
+  SettingsAppearancePage,
+  SettingsBackupPage,
+} from "settings/feature"
 import { IconType } from "app-theme/models"
 import { formatMessage } from "app-localize/utils"
 import { messages, SettingsLayout } from "./layout"
@@ -29,6 +33,10 @@ export const useSettingsRouter = () => {
         element={<Navigate to={settingsPaths.backup} />}
       />
       <Route path={settingsPaths.backup} element={<SettingsBackupPage />} />
+      <Route
+        path={settingsPaths.appearance}
+        element={<SettingsAppearancePage />}
+      />
       <Route path={settingsPaths.about} element={<SettingsAboutPage />} />
     </Route>
   )

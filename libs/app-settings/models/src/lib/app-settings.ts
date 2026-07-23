@@ -3,11 +3,14 @@
  * For licensing, see https://github.com/mudita/mudita-center/blob/master/LICENSE.md
  */
 
+export type ThemeSetting = "system" | "light" | "dark"
+
 export type AppSettings = {
   version: string
   user: {
     privacyPolicyAccepted: boolean
     backupLocation: string
+    theme: ThemeSetting
   }
   system: {
     analyticsId: string | null

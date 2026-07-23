@@ -20,6 +20,9 @@ export const messages = defineMessages({
   backup: {
     id: "page.settingsBackup.title",
   },
+  appearance: {
+    id: "page.settingsAppearance.title",
+  },
   about: {
     id: "page.settingsAbout.title",
   },
@@ -30,6 +33,11 @@ const tabs: Tab[] = [
     title: formatMessage(messages.backup),
     icon: IconType.Backup,
     path: settingsPaths.backup,
+  },
+  {
+    title: formatMessage(messages.appearance),
+    icon: IconType.LightButtonCircle,
+    path: settingsPaths.appearance,
   },
   {
     title: formatMessage(messages.about),

@@ -6,5 +6,6 @@
 export const settingsPaths = {
   index: "/settings",
   backup: "/settings/backup",
+  appearance: "/settings/appearance",
   about: "/settings/about",
 }

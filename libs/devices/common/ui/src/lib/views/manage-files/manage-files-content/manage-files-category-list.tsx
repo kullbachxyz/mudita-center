@@ -77,8 +77,9 @@ const CategoryListItemName = styled.div`
 
 const CategoryListItemNameIcon = styled(Icon)`
   margin: 0 0.8rem 0 -0.8rem;
-  /* category glyphs ship with a dark fill; invert to read light on dark. */
-  filter: invert(1);
+  /* category glyphs ship with a dark fill; invert to read light on dark
+     (dark mode only). */
+  ${({ theme }) => (theme.mode === "dark" ? "filter: invert(1);" : "")}
 `
 
 const CategoryListItemNameText = styled(Typography.H4)``

@@ -19,6 +19,7 @@ export const settingsMigrations: Migrations = {
       user: {
         privacyPolicyAccepted: false,
         backupLocation: path.join(app.getPath("userData"), "backups"),
+        theme: "system" as const,
       },
       system: {
         analyticsId: generateAnalyticsId(),
