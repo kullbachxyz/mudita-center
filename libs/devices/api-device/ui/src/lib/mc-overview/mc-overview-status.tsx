@@ -45,7 +45,9 @@ const IconTextWrapper = styled.div`
   align-items: center;
 `
 const IconWrapper = styled.div`
-  background-color: ${({ theme }) => theme.app.color.grey6};
+  /* grey6 is the page background (near-black); use a lifted surface so the
+     status icon tile is visible in the dark theme. */
+  background-color: ${({ theme }) => theme.app.color.grey7};
   min-width: 4rem;
   min-height: 4rem;
   max-width: 4rem;
@@ -54,6 +56,11 @@ const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* icon glyphs ship with a dark fill; invert so they read light on the
+     dark surface tile. */
+  > * {
+    filter: invert(1);
+  }
 `
 
 const TextWrapper = styled.div`
@@ -69,6 +76,9 @@ const TitleText = styled.h4`
   line-height: ${({ theme }) => theme.app.lineHeight.headline4};
   letter-spacing: 0.032rem;
   margin: 0;
+  /* h4 had no explicit colour and inherited a dark value; pin it to the
+     primary-text token so the status value is visible on the dark theme. */
+  color: ${({ theme }) => theme.app.color.black};
 `
 const DetailText = styled.span`
   font-size: ${({ theme }) => theme.app.fontSize.detailText};

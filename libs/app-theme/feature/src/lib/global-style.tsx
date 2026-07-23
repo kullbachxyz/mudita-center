@@ -10,6 +10,13 @@ export const GlobalStyle = createGlobalStyle`
     interpolate-size: allow-keywords;
   }
 
+  /* MMD monochrome: no ::selection was defined, so the browser default (blue)
+     showed through on selected text. Use a light highlight with dark text. */
+  ::selection {
+    background-color: ${({ theme }) => theme.app.color.grey3};
+    color: ${({ theme }) => theme.app.color.black};
+  }
+
   html {
     background-color: ${({ theme }) => theme.app.color.grey6};
     font-family: GT Pressura, Roboto Condensed, sans-serif;

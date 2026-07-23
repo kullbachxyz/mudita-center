@@ -8,6 +8,10 @@ import { DotNotation } from "app-utils/models"
 export const color = {
   // MMD monochrome: neutrals inverted (255-c), alpha overlays flipped to white,
   // accents (blue/red/green/orange) kept at original values.
+  // grey4/5/7/8 are further lifted from their pure-inverted near-black values
+  // into a visible dark "elevated surface" ramp, so boxes/tiles/checkboxes/
+  // separators read against the near-black base (grey6/white). grey6 stays the
+  // near-black page background.
   white: "#000000",
   black: "#FFFFFF",
   blackAlpha: {
@@ -24,11 +28,11 @@ export const color = {
   grey1: "#C4C0BD",
   grey2: "#959595",
   grey3: "#5A5A5A",
-  grey4: "#2D2924",
-  grey5: "#0B0A09",
+  grey4: "#3A3A3A",
+  grey5: "#1C1C1C",
   grey6: "#040404",
-  grey7: "#121212",
-  grey8: "#181816",
+  grey7: "#242424",
+  grey8: "#2A2A2A",
   red: "#E96A6A",
   green: "#DFEFDE",
   orange: "#DD802A",
