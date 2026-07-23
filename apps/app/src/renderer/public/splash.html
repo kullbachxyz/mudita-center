@@ -20,9 +20,9 @@
       img {
         width: 100%;
         height: 100%;
-        /* MMD monochrome: SVG is neutral (black/white/grey), so a luminance
-           invert flips it to match the dark app without editing the asset. */
-        filter: invert(1);
+        /* MMD monochrome: invert flips the neutral SVG to match the dark app;
+           grayscale guards against any tinted element turning brown. */
+        filter: invert(1) grayscale(1);
       }
     </style>
   </head>
