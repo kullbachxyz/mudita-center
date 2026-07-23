@@ -21,8 +21,9 @@
         width: 100%;
         height: 100%;
         /* MMD monochrome: invert flips the neutral SVG to match the dark app;
-           grayscale guards against any tinted element turning brown. */
-        filter: invert(1) grayscale(1);
+           grayscale guards against tint turning brown; brightness lifts the
+           mid-grey artwork so it reads lighter. */
+        filter: invert(1) grayscale(1) brightness(1.5);
       }
     </style>
   </head>

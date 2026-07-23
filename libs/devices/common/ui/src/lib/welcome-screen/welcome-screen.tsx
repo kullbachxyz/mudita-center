@@ -175,8 +175,9 @@ const Diagram = styled.div`
     /* MMD monochrome: diagram is black line-art on light circles built for a
        white page. invert() flips it to white line-art for the dark theme;
        grayscale() neutralises the blue-grey strokes that invert would otherwise
-       turn brown, keeping everything monochrome. */
-    filter: invert(1) grayscale(1);
+       turn brown; brightness() lifts the mid-grey artwork (logo, laptop) so it
+       reads lighter, while the near-black circles stay subtle. */
+    filter: invert(1) grayscale(1) brightness(1.5);
   }
 `
 
