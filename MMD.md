@@ -5,6 +5,10 @@ as a monochrome / e-ink-style **dark** UI. Branch: `mmd-monochrome`.
 
 ## What it changes
 
+- **Theme setting** — Settings ▸ Appearance ▸ Theme picker: **System / Light /
+  Dark** (default System, following the OS via `prefers-color-scheme`). Light is
+  the original upstream palette; Dark is the MMD monochrome one below. Switches
+  live. Persisted in `app-settings.json` (`user.theme`).
 - **Palette inverted to dark** — neutrals inverted, alpha overlays flipped,
   colour accents (blue/red/green/orange) kept. Files:
   - `libs/app-theme/utils/src/lib/app-theme/color.ts` (modern palette)
