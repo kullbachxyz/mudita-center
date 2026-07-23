@@ -172,6 +172,9 @@ const Diagram = styled.div`
     width: 111%;
     height: 147%;
     transform: translate(-5%, -13%);
+    /* MMD monochrome: diagram is black line-art on light circles built for a
+       white page; invert flips it to white line-art for the dark theme. */
+    filter: invert(1);
   }
 `
 
